@@ -1,44 +1,36 @@
 package com.hospital.gestionhospitalaria.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
-@Entity
-@Table(name = "cita")
+@Document(collection = "cita")
 public class Cita {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCita;
+    private String idCita;
 
-    @ManyToOne
-    @JoinColumn(name = "id_paciente")
-    private Paciente paciente;
-
-    @ManyToOne
-    @JoinColumn(name = "id_medico")
-    private Medico medico;
+    private String idPaciente;
+    private String idMedico;
 
     private LocalDate fecha;
     private LocalTime hora;
     private String motivo;
-    
-    @Enumerated(EnumType.STRING)
-    private EstadoCita estado;
-    
+    private String estado;
+
     public enum EstadoCita {
         PROGRAMADA("Programada"),
         ATENDIDA("Atendida"),
         CANCELADA("Cancelada");
-        
+
         private final String descripcion;
-        
+
         EstadoCita(String descripcion) {
             this.descripcion = descripcion;
         }
-        
+
         public String getDescripcion() {
             return descripcion;
         }

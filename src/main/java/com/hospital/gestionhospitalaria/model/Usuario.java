@@ -1,41 +1,35 @@
 package com.hospital.gestionhospitalaria.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.Data;
-import java.util.List;
 
 @Data
-@Entity
-@Table(name = "usuario")
+@Document(collection = "usuario")
 public class Usuario {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
-    
-    @Column(name = "nombre_usuario", unique = true)
+    private String idUsuario;
+
+    @Field("nombreUsuario")
     private String nombreUsuario;
-    
+
     private String contrasena;
-    
-    @Enumerated(EnumType.STRING)
-    private RolUsuario rol;
-    
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Bitacora> bitacoras;
-    
+    private String rol;
+
     public enum RolUsuario {
         ADMIN("Administrador"),
         MEDICO("Médico"),
         RECEPCIONISTA("Recepcionista"),
         ENFERMERA("Enfermera");
-        
+
         private final String descripcion;
-        
+
         RolUsuario(String descripcion) {
             this.descripcion = descripcion;
         }
-        
+
         public String getDescripcion() {
             return descripcion;
         }

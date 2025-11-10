@@ -1,24 +1,16 @@
 package com.hospital.gestionhospitalaria.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
-import java.util.List;
 
 @Data
-@Entity
-@Table(name = "receta_medica")
+@Document(collection = "receta_medica")
 public class RecetaMedica {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idReceta;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_consulta")
-    private Consulta consulta;
-    
+    private String idReceta;
+
+    private String idConsulta;
     private String indicaciones;
-    
-    @OneToMany(mappedBy = "recetaMedica", cascade = CascadeType.ALL)
-    private List<DetalleReceta> detalles;
 }

@@ -1,36 +1,30 @@
 package com.hospital.gestionhospitalaria.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 @Data
-@Entity
-@Table(name = "diagnostico")
+@Document(collection = "diagnostico")
 public class Diagnostico {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idDiagnostico;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_consulta")
-    private Consulta consulta;
-    
+    private String idDiagnostico;
+
+    private String idConsulta;
     private String descripcion;
-    
-    @Enumerated(EnumType.STRING)
-    private TipoDiagnostico tipo;
-    
+    private String tipo;
+
     public enum TipoDiagnostico {
         PRESUNTIVO("Presuntivo"),
         DEFINITIVO("Definitivo");
-        
+
         private final String descripcion;
-        
+
         TipoDiagnostico(String descripcion) {
             this.descripcion = descripcion;
         }
-        
+
         public String getDescripcion() {
             return descripcion;
         }

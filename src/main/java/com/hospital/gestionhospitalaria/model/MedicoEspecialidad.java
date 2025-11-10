@@ -1,22 +1,16 @@
 package com.hospital.gestionhospitalaria.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 @Data
-@Entity
-@Table(name = "medico_especialidad")
+@Document(collection = "medico_especialidad")
 public class MedicoEspecialidad {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMedicoEsp;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_medico")
-    private Medico medico;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_especialidad")
-    private Especialidad especialidad;
+    private String idMedicoEsp;
+
+    private String idMedico;
+    private String idEspecialidad;
 }
