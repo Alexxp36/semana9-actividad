@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Especialidades</title>
+</head>
+<body>
+<h2>Gestión de Especialidades</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<form method="post" th:action="@{/especialidades}" th:object="${especialidad}">
+    <label>Nombre:</label> <input th:field="*{nombre}"><br>
+    <label>Descripción:</label> <input th:field="*{descripcion}"><br>
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th><th>Nombre</th><th>Descripción</th><th>Acciones</th>
+    </tr>
+    <tr th:each="e : ${especialidades}">
+        <td th:text="${e.idEspecialidad}"></td>
+        <td th:text="${e.nombre}"></td>
+        <td th:text="${e.descripcion}"></td>
+        <td>
+            <a th:href="@{'/especialidades/' + ${e.idEspecialidad} + '/delete'}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

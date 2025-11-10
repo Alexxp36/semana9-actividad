@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignaciones de Especialidades</title>
+</head>
+<body>
+<h2>Asignaciones de Especialidades a Médicos</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<div th:if="${medico != null}">
+    <h3>Médico: <span th:text="${medico.nombres + ' ' + medico.apellidos}"></span></h3>
+</div>
+
+<form th:action="${editMode} ? @{/medico-especialidades/{id}/actualizar(id=${asignacion.idMedicoEsp})} : @{/medico-especialidades}" method="post">
+    <input type="hidden" th:if="${editMode}" name="idMedicoEsp" th:value="${asignacion.idMedicoEsp}">
+
+    <label>Médico:</label>
+    <select name="medico.idMedico" required>
+        <option value="">-- Seleccione --</option>
+        <option th:each="m : ${medicos}"
+                th:value="${m.idMedico}"
+                th:text="${m.nombres + ' ' + m.apellidos}"
+                th:selected="${asignacion.medico != null and asignacion.medico.idMedico == m.idMedico}">
+        </option>
+    </select><br>
+
+    <label>Especialidad:</label>
+    <select name="especialidad.idEspecialidad" required>
+        <option value="">-- Seleccione --</option>
+        <option th:each="e : ${especialidades}"
+                th:value="${e.idEspecialidad}"
+                th:text="${e.nombre}"
+                th:selected="${asignacion.especialidad != null and asignacion.especialidad.idEspecialidad == e.idEspecialidad}">
+        </option>
+    </select><br>
+
+    <button type="submit" th:text="${editMode} ? 'Actualizar' : 'Guardar'"></button>
+    <a th:if="${editMode}" th:href="@{/medico-especialidades}">Cancelar</a>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Médico</th>
+        <th>Especialidad</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="a : ${asignaciones}">
+        <td th:text="${a.idMedicoEsp}"></td>
+        <td th:text="${a.medico.nombres + ' ' + a.medico.apellidos}"></td>
+        <td th:text="${a.especialidad.nombre}"></td>
+        <td>
+            <a th:href="@{'/medico-especialidades/' + ${a.idMedicoEsp} + '/editar'}">Editar</a> |
+            <a th:href="@{'/medico-especialidades/' + ${a.idMedicoEsp} + '/delete'}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

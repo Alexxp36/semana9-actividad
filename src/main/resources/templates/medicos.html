@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Médicos</title>
+</head>
+<body>
+<h2>Gestión de Médicos</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<form th:if="${editMode == null or !editMode}" th:action="@{/medicos}" method="post">
+    <label>Colegiatura:</label>
+    <input type="text" name="colegiatura" th:value="${medico.colegiatura}" required><br>
+
+    <label>Nombres:</label>
+    <input type="text" name="nombres" th:value="${medico.nombres}" required><br>
+
+    <label>Apellidos:</label>
+    <input type="text" name="apellidos" th:value="${medico.apellidos}" required><br>
+
+    <label>Correo:</label>
+    <input type="email" name="correo" th:value="${medico.correo}"><br>
+
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" th:value="${medico.telefono}"><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<form th:if="${editMode}" th:action="@{/medicos/{id}/actualizar(id=${medico.idMedico})}" method="post">
+    <label>Colegiatura:</label>
+    <input type="text" name="colegiatura" th:value="${medico.colegiatura}" required><br>
+
+    <label>Nombres:</label>
+    <input type="text" name="nombres" th:value="${medico.nombres}" required><br>
+
+    <label>Apellidos:</label>
+    <input type="text" name="apellidos" th:value="${medico.apellidos}" required><br>
+
+    <label>Correo:</label>
+    <input type="email" name="correo" th:value="${medico.correo}"><br>
+
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" th:value="${medico.telefono}"><br>
+
+    <button type="submit">Actualizar</button>
+    <a th:href="@{/medicos}">Cancelar</a>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Colegiatura</th>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="m : ${medicos}">
+        <td th:text="${m.idMedico}"></td>
+        <td th:text="${m.colegiatura}"></td>
+        <td th:text="${m.nombres}"></td>
+        <td th:text="${m.apellidos}"></td>
+        <td th:text="${m.correo}"></td>
+        <td th:text="${m.telefono}"></td>
+        <td>
+            <a th:href="@{'/medicos/' + ${m.idMedico} + '/editar'}">Editar</a> |
+            <a th:href="@{'/medicos/' + ${m.idMedico} + '/delete'}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas Médicas</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<h2>🩺 Gestión de Consultas Médicas</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<div th:if="${error}" style="color: red; background-color: #ffe6e6; padding: 10px; margin: 10px 0; border: 1px solid red;">
+    <strong>Error:</strong> <span th:text="${error}"></span>
+</div>
+
+<div th:if="${success}" style="color: green; background-color: #e6ffe6; padding: 10px; margin: 10px 0; border: 1px solid green;">
+    <strong>Éxito:</strong> <span th:text="${success}"></span>
+</div>
+
+<form th:action="${editMode ? '/consultas/' + consulta.idConsulta + '/actualizar' : '/consultas'}" method="post">
+    <input type="hidden" th:if="${editMode}" name="idConsulta" th:value="${consulta.idConsulta}">
+
+    <label>Cita:</label>
+    <select name="cita.idCita">
+        <option value="">-- Selecciona Cita --</option>
+        <option th:each="c : ${citas}"
+                th:value="${c.idCita}"
+                th:text="${'Cita #' + c.idCita + ' - ' + c.paciente.nombres + ' ' + c.paciente.apellidos + ' (' + c.fecha + ' ' + c.hora + ')'}"
+                th:selected="${consulta.cita != null and consulta.cita.idCita == c.idCita}">
+        </option>
+    </select><br>
+
+    <label>Médico:</label>
+    <select name="medico.idMedico" required>
+        <option value="">-- Selecciona Médico --</option>
+        <option th:each="m : ${medicos}"
+                th:value="${m.idMedico}"
+                th:text="${m.nombres + ' ' + m.apellidos}"
+                th:selected="${consulta.medico != null and consulta.medico.idMedico == m.idMedico}">
+        </option>
+    </select><br>
+
+    <label>Paciente:</label>
+    <select name="paciente.idPaciente" required>
+        <option value="">-- Selecciona Paciente --</option>
+        <option th:each="p : ${pacientes}"
+                th:value="${p.idPaciente}"
+                th:text="${p.nombres + ' ' + p.apellidos + ' (' + p.dni + ')'}"
+                th:selected="${consulta.paciente != null and consulta.paciente.idPaciente == p.idPaciente}">
+        </option>
+    </select><br>
+
+    <label>Historia Clínica:</label>
+    <select name="historiaClinica.idHistoria">
+        <option value="">-- Selecciona Historia Clínica --</option>
+        <option th:each="h : ${historiasClinicas}"
+                th:value="${h.idHistoria}"
+                th:text="${'Historia #' + h.idHistoria + ' - ' + h.paciente.nombres + ' ' + h.paciente.apellidos}"
+                th:selected="${consulta.historiaClinica != null and consulta.historiaClinica.idHistoria == h.idHistoria}">
+        </option>
+    </select><br>
+
+    <label>Fecha:</label>
+    <input type="date" name="fecha" th:value="${consulta.fecha}" required><br>
+
+    <label>Hora:</label>
+    <input type="time" name="hora" th:value="${consulta.hora}" required><br>
+
+    <label>Motivo de Consulta:</label>
+    <textarea name="motivoConsulta" rows="3" cols="50" th:text="${consulta.motivoConsulta}"></textarea><br>
+
+    <label>Observaciones:</label>
+    <textarea name="observaciones" rows="4" cols="50" th:text="${consulta.observaciones}"></textarea><br>
+
+    <button type="submit" th:text="${editMode ? 'Actualizar' : 'Guardar'}"></button>
+    <a th:if="${editMode}" th:href="@{/consultas}">Cancelar</a>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Médico</th>
+        <th>Paciente</th>
+        <th>Motivo</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="c : ${consultas}">
+        <td th:text="${c.idConsulta}"></td>
+        <td th:text="${c.fecha}"></td>
+        <td th:text="${c.hora}"></td>
+        <td th:text="${c.medico != null ? c.medico.nombres + ' ' + c.medico.apellidos : '—'}"></td>
+        <td th:text="${c.paciente != null ? c.paciente.nombres + ' ' + c.paciente.apellidos : '—'}"></td>
+        <td th:text="${c.motivoConsulta != null ? (c.motivoConsulta.length() > 30 ? c.motivoConsulta.substring(0, 30) + '...' : c.motivoConsulta) : '—'}"></td>
+        <td>
+            <a th:href="@{'/consultas/' + ${c.idConsulta} + '/editar'}">Editar</a> |
+            <a th:href="@{'/diagnosticos?consultaId=' + ${c.idConsulta}}">Diagnósticos</a> |
+            <a th:href="@{'/recetas?consultaId=' + ${c.idConsulta}}">Recetas</a> |
+            <a th:href="@{'/consultas/' + ${c.idConsulta} + '/delete'}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

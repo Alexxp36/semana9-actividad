@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospitalizaciones</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<h2>🏥 Gestión de Hospitalizaciones</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<div th:if="${error}" style="color: red; background-color: #ffe6e6; padding: 10px; margin: 10px 0; border: 1px solid red;">
+    <strong>Error:</strong> <span th:text="${error}"></span>
+</div>
+
+<h3 th:text="${editMode ? 'Editar Hospitalización' : 'Nueva Hospitalización'}"></h3>
+<form th:if="${editMode == null or !editMode}" th:action="@{/hospitalizaciones(habitacionId=${habitacionId})}" method="post">
+    <label for="paciente">Paciente:</label>
+    <select id="paciente" name="paciente.idPaciente" required>
+        <option value="">-- Selecciona Paciente --</option>
+        <option th:each="p : ${pacientes}"
+                th:value="${p.idPaciente}"
+                th:text="${p.nombres + ' ' + p.apellidos + ' (' + p.dni + ')'}">
+        </option>
+    </select><br>
+
+    <label for="habitacion">Habitación:</label>
+    <select id="habitacion" name="habitacion.idHabitacion" required>
+        <option value="">-- Selecciona Habitación --</option>
+        <option th:each="h : ${habitaciones}"
+                th:value="${h.idHabitacion}"
+                th:text="${h.numero + ' (' + h.tipo.descripcion + ' - ' + h.estado.descripcion + ')'}"
+                th:selected="${habitacion != null and habitacion.idHabitacion == h.idHabitacion}">
+        </option>
+    </select><br>
+
+    <label for="fechaIngreso">Fecha de Ingreso:</label>
+    <input type="date" id="fechaIngreso" name="fechaIngreso" required><br>
+
+    <label for="fechaAlta">Fecha de Alta (opcional):</label>
+    <input type="date" id="fechaAlta" name="fechaAlta"><br>
+
+    <label for="diagnosticoIngreso">Diagnóstico de Ingreso:</label>
+    <textarea id="diagnosticoIngreso" name="diagnosticoIngreso" required></textarea><br>
+
+    <label for="estado">Estado:</label>
+    <select id="estado" name="estado" required>
+        <option value="">-- Selecciona Estado --</option>
+        <option value="ACTIVO">Activo</option>
+        <option value="DADO_DE_ALTA">Dado de Alta</option>
+    </select><br>
+
+    <button type="submit">Guardar Hospitalización</button>
+</form>
+
+<form th:if="${editMode}" th:action="@{/hospitalizaciones/{id}/actualizar(id=${hospitalizacion.idHosp}, habitacionId=${habitacionId})}" method="post">
+    <input type="hidden" name="idHosp" th:value="${hospitalizacion.idHosp}">
+    <label for="pacienteEdit">Paciente:</label>
+    <select id="pacienteEdit" name="paciente.idPaciente" required>
+        <option value="">-- Selecciona Paciente --</option>
+        <option th:each="p : ${pacientes}"
+                th:value="${p.idPaciente}"
+                th:text="${p.nombres + ' ' + p.apellidos + ' (' + p.dni + ')'}"
+                th:selected="${hospitalizacion.paciente != null and hospitalizacion.paciente.idPaciente == p.idPaciente}">
+        </option>
+    </select><br>
+
+    <label for="habitacionEdit">Habitación:</label>
+    <select id="habitacionEdit" name="habitacion.idHabitacion" required>
+        <option value="">-- Selecciona Habitación --</option>
+        <option th:each="h : ${habitaciones}"
+                th:value="${h.idHabitacion}"
+                th:text="${h.numero + ' (' + h.tipo.descripcion + ' - ' + h.estado.descripcion + ')'}"
+                th:selected="${hospitalizacion.habitacion != null and hospitalizacion.habitacion.idHabitacion == h.idHabitacion}">
+        </option>
+    </select><br>
+
+    <label for="fechaIngresoEdit">Fecha de Ingreso:</label>
+    <input type="date" id="fechaIngresoEdit" name="fechaIngreso" th:value="${hospitalizacion.fechaIngreso}" required><br>
+
+    <label for="fechaAltaEdit">Fecha de Alta (opcional):</label>
+    <input type="date" id="fechaAltaEdit" name="fechaAlta" th:value="${hospitalizacion.fechaAlta}"><br>
+
+    <label for="diagnosticoIngresoEdit">Diagnóstico de Ingreso:</label>
+    <textarea id="diagnosticoIngresoEdit" name="diagnosticoIngreso" th:text="${hospitalizacion.diagnosticoIngreso}" required></textarea><br>
+
+    <label for="estadoEdit">Estado:</label>
+    <select id="estadoEdit" name="estado" required>
+        <option value="">-- Selecciona Estado --</option>
+        <option value="ACTIVO" th:selected="${hospitalizacion.estado.name() == 'ACTIVO'}">Activo</option>
+        <option value="DADO_DE_ALTA" th:selected="${hospitalizacion.estado.name() == 'DADO_DE_ALTA'}">Dado de Alta</option>
+    </select><br>
+
+    <button type="submit">Actualizar Hospitalización</button>
+    <a th:href="@{/hospitalizaciones(habitacionId=${habitacionId})}">Cancelar</a>
+</form>
+
+<hr>
+
+<h3>Lista de Hospitalizaciones [[${habitacion != null ? 'para Habitación ' + habitacion.numero : ''}]]</h3>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Paciente</th>
+        <th>Habitación</th>
+        <th>Fecha Ingreso</th>
+        <th>Fecha Alta</th>
+        <th>Diagnóstico Ingreso</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="hosp : ${hospitalizaciones}">
+        <td th:text="${hosp.idHosp}"></td>
+        <td th:text="${hosp.paciente.nombres + ' ' + hosp.paciente.apellidos}"></td>
+        <td th:text="${hosp.habitacion.numero}"></td>
+        <td th:text="${hosp.fechaIngreso}"></td>
+        <td th:text="${hosp.fechaAlta}"></td>
+        <td th:text="${hosp.diagnosticoIngreso}"></td>
+        <td>
+            <span th:style="${hosp.estado.name() == 'ACTIVO' ? 'color: green;' : 'color: blue;'}"
+                  th:text="${hosp.estado.descripcion}"></span>
+        </td>
+        <td>
+            <a th:href="@{'/hospitalizaciones/' + ${hosp.idHosp} + '/editar'(habitacionId=${habitacionId})}">Editar</a> |
+            <a th:href="@{'/hospitalizaciones/' + ${hosp.idHosp} + '/delete'(habitacionId=${habitacionId})}" onclick="return confirm('¿Estás seguro de eliminar esta hospitalización?');">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

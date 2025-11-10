@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recetas Médicas</title>
+</head>
+<body>
+<h2>💊 Gestión de Recetas Médicas</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<form th:action="@{/recetas}" method="post">
+    <label>Consulta:</label>
+    <select name="consulta.idConsulta" required>
+        <option value="">-- Selecciona Consulta --</option>
+        <option th:each="c : ${consultas}"
+                th:value="${c.idConsulta}"
+                th:text="${c.paciente.nombres + ' ' + c.paciente.apellidos + ' - ' + c.fecha}">
+        </option>
+    </select><br>
+
+    <label>Indicaciones:</label>
+    <textarea name="indicaciones" rows="4" cols="50" required></textarea><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Consulta</th>
+        <th>Indicaciones</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="r : ${recetas}">
+        <td th:text="${r.idReceta}"></td>
+        <td th:text="${r.consulta.paciente.nombres + ' ' + r.consulta.paciente.apellidos}"></td>
+        <td th:text="${r.indicaciones}"></td>
+        <td>
+            <a th:href="@{'/recetas/' + ${r.idReceta} + '/editar?consultaId=' + ${r.consulta.idConsulta}}">Editar</a> |
+            <a th:href="@{'/recetas/' + ${r.idReceta} + '/delete?consultaId=' + ${r.consulta.idConsulta}}">Eliminar</a> |
+            <a th:href="@{'/detalle-recetas?recetaId=' + ${r.idReceta}}">Ver Detalles</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

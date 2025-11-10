@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de Recetas</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<h2>💊 Detalles de Recetas Médicas</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<a th:if="${recetaId != null}" th:href="@{'/recetas/' + ${recetaId} + '/editar'}">⬅ Volver a Receta</a>
+<hr>
+
+<div th:if="${error}" style="color: red; background-color: #ffe6e6; padding: 10px; margin: 10px 0; border: 1px solid red;">
+    <strong>Error:</strong> <span th:text="${error}"></span>
+</div>
+
+<div th:if="${success}" style="color: green; background-color: #e6ffe6; padding: 10px; margin: 10px 0; border: 1px solid green;">
+    <strong>Éxito:</strong> <span th:text="${success}"></span>
+</div>
+
+<div th:if="${recetaMedica != null}">
+    <h3>Receta para: <span th:text="${recetaMedica.consulta.paciente.nombres + ' ' + recetaMedica.consulta.paciente.apellidos}"></span></h3>
+    <p><strong>Fecha:</strong> <span th:text="${recetaMedica.consulta.fecha}"></span></p>
+</div>
+
+<form th:action="${editMode ? '/recetas/' + recetaId + '/detalles/' + detalleReceta.idDetalleReceta + '/actualizar' : '/recetas/' + recetaId + '/detalles'}" method="post">
+    <input type="hidden" th:if="${editMode}" name="idDetalleReceta" th:value="${detalleReceta.idDetalleReceta}">
+    <input type="hidden" name="recetaId" th:value="${recetaId}">
+
+    <label>Medicamento:</label>
+    <input type="text" name="medicamento" th:value="${detalleReceta.medicamento}" required><br>
+
+    <label>Dosis:</label>
+    <input type="text" name="dosis" th:value="${detalleReceta.dosis}" required><br>
+
+    <label>Frecuencia:</label>
+    <input type="text" name="frecuencia" th:value="${detalleReceta.frecuencia}" required><br>
+
+    <label>Duración:</label>
+    <input type="text" name="duracion" th:value="${detalleReceta.duracion}" required><br>
+
+    <button type="submit" th:text="${editMode ? 'Actualizar' : 'Guardar'}"></button>
+    <a th:if="${editMode}" th:href="@{'/recetas/' + ${recetaId} + '/editar'}">Cancelar</a>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Medicamento</th>
+        <th>Dosis</th>
+        <th>Frecuencia</th>
+        <th>Duración</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="d : ${detallesReceta}">
+        <td th:text="${d.idDetalleReceta}"></td>
+        <td th:text="${d.medicamento}"></td>
+        <td th:text="${d.dosis}"></td>
+        <td th:text="${d.frecuencia}"></td>
+        <td th:text="${d.duracion}"></td>
+        <td>
+            <a th:href="@{'/recetas/' + ${recetaId} + '/detalles/' + ${d.idDetalleReceta} + '/editar'}">Editar</a> |
+            <a th:href="@{'/recetas/detalles/' + ${d.idDetalleReceta} + '/delete?recetaId=' + ${recetaId}}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

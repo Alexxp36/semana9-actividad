@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitácora del Sistema</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<h2>📋 Bitácora del Sistema</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<div th:if="${usuario != null}">
+    <h3>Actividad del Usuario: <span th:text="${usuario.nombreUsuario}"></span></h3>
+    <p><strong>Rol:</strong> <span th:text="${usuario.rol.descripcion}"></span></p>
+</div>
+
+<div style="margin: 20px 0;">
+    <h3>Filtros</h3>
+    <form method="get" action="/bitacora">
+        <label>Usuario:</label>
+        <select name="usuarioId">
+            <option value="">-- Todos los usuarios --</option>
+            <option th:each="u : ${usuarios}"
+                    th:value="${u.idUsuario}"
+                    th:text="${u.nombreUsuario + ' (' + u.rol.descripcion + ')'}"
+                    th:selected="${usuarioId != null and usuarioId == u.idUsuario}">
+            </option>
+        </select>
+        
+        <label>Acción:</label>
+        <input type="text" name="accion" th:value="${accion}" placeholder="Buscar por acción">
+        
+        <button type="submit">Filtrar</button>
+        <a th:href="@{/bitacora}">Limpiar</a>
+    </form>
+</div>
+
+<div style="margin: 20px 0;">
+    <h3>Resumen de Actividad</h3>
+    <p><strong>Total de registros:</strong> <span th:text="${bitacoras.size()}"></span></p>
+    <p><strong>Última actividad:</strong> <span th:text="${bitacoras.isEmpty() ? 'N/A' : bitacoras.get(0).fechaHora}"></span></p>
+</div>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Acción</th>
+        <th>Fecha y Hora</th>
+        <th>Detalle</th>
+    </tr>
+    <tr th:each="b : ${bitacoras}">
+        <td th:text="${b.idBitacora}"></td>
+        <td th:text="${b.usuario != null ? b.usuario.nombreUsuario + ' (' + b.usuario.rol.descripcion + ')' : 'Usuario eliminado'}"></td>
+        <td th:text="${b.accion}"></td>
+        <td th:text="${b.fechaHora}"></td>
+        <td th:text="${b.detalle != null ? (b.detalle.length() > 50 ? b.detalle.substring(0, 50) + '...' : b.detalle) : '—'}"></td>
+    </tr>
+</table>
+
+<div th:if="${bitacoras.isEmpty()}" style="text-align: center; margin: 40px 0; color: #666;">
+    <p>No hay registros en la bitácora para los filtros seleccionados.</p>
+</div>
+
+</body>
+</html>

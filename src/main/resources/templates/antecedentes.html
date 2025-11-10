@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Antecedentes Médicos</title>
+</head>
+<body>
+<h2>📋 Gestión de Antecedentes Médicos</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<form th:action="@{/antecedentes}" method="post">
+    <input type="hidden" name="historiaClinica.idHistoria" th:value="${historiaId}">
+
+    <label>Tipo de Antecedente:</label>
+    <select name="tipo" required>
+        <option value="">-- Selecciona Tipo --</option>
+        <option value="FAMILIAR">Familiar</option>
+        <option value="PERSONAL">Personal</option>
+        <option value="QUIRURGICO">Quirúrgico</option>
+        <option value="ALERGICO">Alérgico</option>
+        <option value="MEDICAMENTOSO">Medicamentoso</option>
+    </select><br>
+
+    <label>Descripción:</label>
+    <textarea name="descripcion" rows="4" cols="50" required></textarea><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="a : ${antecedentes}">
+        <td th:text="${a.idAntecedente}"></td>
+        <td th:text="${a.tipo}"></td>
+        <td th:text="${a.descripcion}"></td>
+        <td>
+            <a th:href="@{'/antecedentes/' + ${a.idAntecedente} + '/editar?historiaId=' + ${a.historiaClinica.idHistoria}}">Editar</a> |
+            <a th:href="@{'/antecedentes/' + ${a.idAntecedente} + '/delete?historiaId=' + ${a.historiaClinica.idHistoria}}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

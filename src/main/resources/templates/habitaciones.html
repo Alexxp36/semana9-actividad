@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Habitaciones</title>
+</head>
+<body>
+<h2>🏥 Gestión de Habitaciones</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<form th:action="@{/habitaciones}" method="post">
+    <label>Número de Habitación:</label>
+    <input type="text" name="numero" required><br>
+
+    <label>Tipo de Habitación:</label>
+    <select name="tipo" required>
+        <option value="">-- Selecciona Tipo --</option>
+        <option value="INDIVIDUAL">Individual</option>
+        <option value="DOBLE">Doble</option>
+        <option value="SUITE">Suite</option>
+        <option value="UCI">UCI</option>
+    </select><br>
+
+    <label>Estado:</label>
+    <select name="estado" required>
+        <option value="">-- Selecciona Estado --</option>
+        <option value="DISPONIBLE">Disponible</option>
+        <option value="OCUPADA">Ocupada</option>
+        <option value="MANTENIMIENTO">Mantenimiento</option>
+    </select><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Número</th>
+        <th>Tipo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="h : ${habitaciones}">
+        <td th:text="${h.idHabitacion}"></td>
+        <td th:text="${h.numero}"></td>
+        <td th:text="${h.tipo}"></td>
+        <td th:text="${h.estado}"></td>
+        <td>
+            <a th:href="@{'/habitaciones/' + ${h.idHabitacion} + '/editar'}">Editar</a> |
+            <a th:href="@{'/habitaciones/' + ${h.idHabitacion} + '/delete'}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

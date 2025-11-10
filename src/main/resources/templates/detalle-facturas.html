@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de Facturas</title>
+</head>
+<body>
+<h2>💰 Detalles de Facturas</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<a th:href="@{/facturas}">⬅ Volver a Facturas</a>
+<hr>
+
+<form th:action="@{/detalle-facturas}" method="post">
+    <label>Factura:</label>
+    <select name="factura.idFactura" required>
+        <option value="">-- Selecciona Factura --</option>
+        <option th:each="f : ${facturas}"
+                th:value="${f.idFactura}"
+                th:text="${f.paciente.nombres + ' ' + f.paciente.apellidos + ' - $' + f.total}">
+        </option>
+    </select><br>
+
+    <label>Concepto:</label>
+    <input type="text" name="concepto" required><br>
+
+    <label>Monto:</label>
+    <input type="number" step="0.01" name="monto" required><br>
+
+    <label>Tipo de Concepto:</label>
+    <select name="tipoConcepto" required>
+        <option value="">-- Selecciona Tipo --</option>
+        <option value="CONSULTA">Consulta</option>
+        <option value="MEDICAMENTO">Medicamento</option>
+        <option value="EXAMEN">Examen</option>
+        <option value="PROCEDIMIENTO">Procedimiento</option>
+        <option value="HOSPITALIZACION">Hospitalización</option>
+        <option value="OTROS">Otros</option>
+    </select><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Factura</th>
+        <th>Concepto</th>
+        <th>Monto</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="d : ${detalles}">
+        <td th:text="${d.idDetalleFactura}"></td>
+        <td th:text="${d.factura.paciente.nombres + ' ' + d.factura.paciente.apellidos}"></td>
+        <td th:text="${d.concepto}"></td>
+        <td th:text="${d.monto}"></td>
+        <td th:text="${d.tipoConcepto}"></td>
+        <td>
+            <a th:href="@{'/detalle-facturas/' + ${d.idDetalleFactura} + '/editar?facturaId=' + ${d.factura.idFactura}}">Editar</a> |
+            <a th:href="@{'/detalle-facturas/' + ${d.idDetalleFactura} + '/delete?facturaId=' + ${d.factura.idFactura}}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnósticos</title>
+</head>
+<body>
+<h2>🔍 Gestión de Diagnósticos</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<form th:action="@{/diagnosticos}" method="post">
+    <label>Consulta:</label>
+    <select name="consulta.idConsulta" required>
+        <option value="">-- Selecciona Consulta --</option>
+        <option th:each="c : ${consultas}"
+                th:value="${c.idConsulta}"
+                th:text="${c.paciente.nombres + ' ' + c.paciente.apellidos + ' - ' + c.fecha}">
+        </option>
+    </select><br>
+
+    <label>Tipo de Diagnóstico:</label>
+    <select name="tipo" required>
+        <option value="">-- Selecciona Tipo --</option>
+        <option value="PRESUNTIVO">Presuntivo</option>
+        <option value="DEFINITIVO">Definitivo</option>
+        <option value="DIFERENCIAL">Diferencial</option>
+    </select><br>
+
+    <label>Descripción:</label>
+    <textarea name="descripcion" rows="4" cols="50" required></textarea><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Consulta</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="d : ${diagnosticos}">
+        <td th:text="${d.idDiagnostico}"></td>
+        <td th:text="${d.consulta.paciente.nombres + ' ' + d.consulta.paciente.apellidos}"></td>
+        <td th:text="${d.tipo}"></td>
+        <td th:text="${d.descripcion}"></td>
+        <td>
+            <a th:href="@{'/diagnosticos/' + ${d.idDiagnostico} + '/editar?consultaId=' + ${d.consulta.idConsulta}}">Editar</a> |
+            <a th:href="@{'/diagnosticos/' + ${d.idDiagnostico} + '/delete?consultaId=' + ${d.consulta.idConsulta}}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

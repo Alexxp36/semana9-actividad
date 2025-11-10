@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pacientes</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <h2>👤 Gestión de Pacientes</h2>
+        
+        <div class="nav">
+            <a th:href="@{/}">🏠 Inicio</a>
+            <a th:href="@{/historias-clinicas}">📋 Historias Clínicas</a>
+            <a th:href="@{/antecedentes}">📝 Antecedentes</a>
+        </div>
+
+        <div th:if="${error}" class="alert alert-error">
+            <strong>Error:</strong> <span th:text="${error}"></span>
+        </div>
+
+        <div class="form-container">
+            <h3 th:text="${editMode ? '✏️ Editar Paciente' : '➕ Nuevo Paciente'}"></h3>
+            <form th:action="${editMode} ? @{/pacientes/{id}/actualizar(id=${paciente.idPaciente})} : @{/pacientes}" method="post">
+                <input type="hidden" th:if="${editMode}" name="idPaciente" th:value="${paciente.idPaciente}">
+
+                <div class="form-group">
+                    <label for="telefono">📞 Teléfono:</label>
+                    <input type="text" id="telefono" name="telefono" th:value="${paciente.telefono}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombres">👤 Nombres:</label>
+                    <input type="text" id="nombres" name="nombres" th:value="${paciente.nombres}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="apellidos">👤 Apellidos:</label>
+                    <input type="text" id="apellidos" name="apellidos" th:value="${paciente.apellidos}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dni">🆔 DNI:</label>
+                    <input type="text" id="dni" name="dni" th:value="${paciente.dni}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="correo">📧 Correo:</label>
+                    <input type="email" id="correo" name="correo" th:value="${paciente.correo}">
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion">🏠 Dirección:</label>
+                    <input type="text" id="direccion" name="direccion" th:value="${paciente.direccion}">
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaNacimiento">📅 Fecha de Nacimiento:</label>
+                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" th:value="${paciente.fechaNacimiento}">
+                </div>
+
+                <div class="form-group">
+                    <label for="sexo">⚥ Sexo:</label>
+                    <select id="sexo" name="sexo">
+                        <option value="">-- Selecciona Sexo --</option>
+                        <option value="M" th:selected="${paciente.sexo == 'M'}">👨 Masculino</option>
+                        <option value="F" th:selected="${paciente.sexo == 'F'}">👩 Femenino</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado">📊 Estado:</label>
+                    <select id="estado" name="estado">
+                        <option value="">-- Selecciona Estado --</option>
+                        <option value="ACTIVO" th:selected="${paciente.estado == 'ACTIVO'}">✅ Activo</option>
+                        <option value="INACTIVO" th:selected="${paciente.estado == 'INACTIVO'}">❌ Inactivo</option>
+                    </select>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" th:text="${editMode ? '💾 Actualizar Paciente' : '➕ Guardar Paciente'}"></button>
+                    <a th:if="${editMode}" th:href="@{/pacientes}" class="btn btn-secondary">❌ Cancelar</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <h3>📋 Lista de Pacientes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>📞 Teléfono</th>
+                        <th>👤 Nombres</th>
+                        <th>👤 Apellidos</th>
+                        <th>🆔 DNI</th>
+                        <th>📧 Correo</th>
+                        <th>🏠 Dirección</th>
+                        <th>📅 Fecha Nac.</th>
+                        <th>⚥ Sexo</th>
+                        <th>📊 Estado</th>
+                        <th>⚙️ Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${pacientes}">
+                        <td th:text="${p.idPaciente}"></td>
+                        <td th:text="${p.telefono}"></td>
+                        <td th:text="${p.nombres}"></td>
+                        <td th:text="${p.apellidos}"></td>
+                        <td th:text="${p.dni}"></td>
+                        <td th:text="${p.correo}"></td>
+                        <td th:text="${p.direccion}"></td>
+                        <td th:text="${p.fechaNacimiento}"></td>
+                        <td>
+                            <span th:if="${p.sexo == 'M'}" class="status-badge status-active">👨 M</span>
+                            <span th:if="${p.sexo == 'F'}" class="status-badge status-pending">👩 F</span>
+                        </td>
+                        <td>
+                            <span th:if="${p.estado == 'ACTIVO'}" class="status-badge status-active">✅ Activo</span>
+                            <span th:if="${p.estado == 'INACTIVO'}" class="status-badge status-cancelled">❌ Inactivo</span>
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                <a th:href="@{'/pacientes/' + ${p.idPaciente} + '/editar'}" class="edit">✏️ Editar</a>
+                                <a th:href="@{'/pacientes/' + ${p.idPaciente} + '/delete'}" class="delete" onclick="return confirm('¿Estás seguro de eliminar este paciente?');">🗑️ Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

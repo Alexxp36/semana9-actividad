@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Historias Clínicas</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<h2>📋 Gestión de Historias Clínicas</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<div th:if="${error}" style="color: red; background-color: #ffe6e6; padding: 10px; margin: 10px 0; border: 1px solid red;">
+    <strong>Error:</strong> <span th:text="${error}"></span>
+</div>
+
+<div th:if="${success}" style="color: green; background-color: #e6ffe6; padding: 10px; margin: 10px 0; border: 1px solid green;">
+    <strong>Éxito:</strong> <span th:text="${success}"></span>
+</div>
+
+<form th:action="${editMode ? '/historias-clinicas/' + historiaClinica.idHistoria + '/actualizar' : '/historias-clinicas'}" method="post">
+    <input type="hidden" th:if="${editMode}" name="idHistoria" th:value="${historiaClinica.idHistoria}">
+
+    <label>Paciente:</label>
+    <select name="paciente.idPaciente" required>
+        <option value="">-- Selecciona Paciente --</option>
+        <option th:each="p : ${pacientes}"
+                th:value="${p.idPaciente}"
+                th:text="${p.nombres + ' ' + p.apellidos + ' (' + p.telefono + ')'}"
+                th:selected="${historiaClinica.paciente != null and historiaClinica.paciente.idPaciente == p.idPaciente}">
+        </option>
+    </select><br>
+
+    <label>Fecha de Apertura:</label>
+    <input type="date" name="fechaApertura" th:value="${historiaClinica.fechaApertura}" required><br>
+
+    <label>Observaciones:</label>
+    <textarea name="observaciones" rows="3" cols="50" th:text="${historiaClinica.observaciones}"></textarea><br>
+
+    <button type="submit" th:text="${editMode ? 'Actualizar' : 'Guardar'}"></button>
+    <a th:if="${editMode}" th:href="@{/historias-clinicas}">Cancelar</a>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Paciente</th>
+        <th>DNI</th>
+        <th>Fecha Apertura</th>
+        <th>Observaciones</th>
+        <th>Antecedentes</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="h : ${historiasClinicas}">
+        <td th:text="${h.idHistoria}"></td>
+        <td th:text="${h.paciente != null ? h.paciente.nombres + ' ' + h.paciente.apellidos : '—'}"></td>
+        <td th:text="${h.paciente != null ? h.paciente.dni : '—'}"></td>
+        <td th:text="${h.fechaApertura}"></td>
+        <td th:text="${h.observaciones != null ? (h.observaciones.length() > 50 ? h.observaciones.substring(0, 50) + '...' : h.observaciones) : '—'}"></td>
+        <td>
+            <a th:href="@{'/antecedentes?historiaId=' + ${h.idHistoria}}">Ver Antecedentes</a>
+        </td>
+        <td>
+            <a th:href="@{'/historias-clinicas/' + ${h.idHistoria} + '/editar'}">Editar</a> |
+            <a th:href="@{'/historias-clinicas/' + ${h.idHistoria} + '/delete'}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

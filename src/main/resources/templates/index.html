@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Hospitalaria</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 Sistema de Gestión Hospitalaria</h1>
+        <p class="text-center">Panel de Administración - Gestión Integral de Servicios Médicos</p>
+
+        <div class="nav">
+            <a th:href="@{/pacientes}">👤 Pacientes</a>
+            <a th:href="@{/medicos}">👨‍⚕️ Médicos</a>
+            <a th:href="@{/especialidades}">🏥 Especialidades</a>
+            <a th:href="@{/citas}">📅 Citas</a>
+            <a th:href="@{/consultas}">🩺 Consultas</a>
+            <a th:href="@{/habitaciones}">🏠 Habitaciones</a>
+            <a th:href="@{/hospitalizaciones}">🏥 Hospitalizaciones</a>
+            <a th:href="@{/facturas}">💰 Facturas</a>
+            <a th:href="@{/usuarios}">👥 Usuarios</a>
+        </div>
+
+        <hr>
+
+        <h2>Módulos del Sistema</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; border: 1px solid #bdc3c7;">
+                <h3>👥 Gestión de Pacientes</h3>
+                <p>Administración de pacientes, historias clínicas y antecedentes médicos.</p>
+                <div style="margin-top: 15px;">
+                    <a th:href="@{/pacientes}" class="btn btn-primary">Pacientes</a>
+                    <a th:href="@{/historias-clinicas}" class="btn btn-secondary">Historias</a>
+                    <a th:href="@{/antecedentes}" class="btn btn-secondary">Antecedentes</a>
+                </div>
+            </div>
+
+            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; border: 1px solid #bdc3c7;">
+                <h3>👨‍⚕️ Gestión de Médicos</h3>
+                <p>Administración del personal médico y sus especialidades.</p>
+                <div style="margin-top: 15px;">
+                    <a th:href="@{/medicos}" class="btn btn-primary">Médicos</a>
+                    <a th:href="@{/especialidades}" class="btn btn-secondary">Especialidades</a>
+                    <a th:href="@{/medico-especialidades}" class="btn btn-secondary">Asignaciones</a>
+                </div>
+            </div>
+
+            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; border: 1px solid #bdc3c7;">
+                <h3>📅 Gestión de Citas</h3>
+                <p>Programación y gestión de citas médicas y consultas.</p>
+                <div style="margin-top: 15px;">
+                    <a th:href="@{/citas}" class="btn btn-primary">Citas</a>
+                    <a th:href="@{/consultas}" class="btn btn-secondary">Consultas</a>
+                </div>
+            </div>
+
+            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; border: 1px solid #bdc3c7;">
+                <h3>🏥 Gestión Hospitalaria</h3>
+                <p>Control de habitaciones y pacientes internados.</p>
+                <div style="margin-top: 15px;">
+                    <a th:href="@{/habitaciones}" class="btn btn-primary">Habitaciones</a>
+                    <a th:href="@{/hospitalizaciones}" class="btn btn-secondary">Internaciones</a>
+                </div>
+            </div>
+
+            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; border: 1px solid #bdc3c7;">
+                <h3>💊 Gestión Médica</h3>
+                <p>Diagnósticos, recetas médicas y tratamientos.</p>
+                <div style="margin-top: 15px;">
+                    <a th:href="@{/diagnosticos}" class="btn btn-primary">Diagnósticos</a>
+                    <a th:href="@{/recetas}" class="btn btn-secondary">Recetas</a>
+                </div>
+            </div>
+
+            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; border: 1px solid #bdc3c7;">
+                <h3>💰 Gestión Financiera</h3>
+                <p>Facturas, pagos y detalles financieros.</p>
+                <div style="margin-top: 15px;">
+                    <a th:href="@{/facturas}" class="btn btn-primary">Facturas</a>
+                    <a th:href="@{/detalle-facturas}" class="btn btn-secondary">Detalles</a>
+                </div>
+            </div>
+
+            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; border: 1px solid #bdc3c7;">
+                <h3>🔐 Administración</h3>
+                <p>Usuarios, roles y auditoría del sistema.</p>
+                <div style="margin-top: 15px;">
+                    <a th:href="@{/usuarios}" class="btn btn-primary">Usuarios</a>
+                    <a th:href="@{/bitacora}" class="btn btn-secondary">Bitácora</a>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="text-center">
+            <h3>Sistema de Gestión Hospitalaria v2.0</h3>
+            <p>Desarrollado para administrar de manera integral todos los procesos hospitalarios</p>
+            <p><strong>Características:</strong> CRUD Completo • Interfaz Simple • Responsive • Seguro</p>
+        </div>
+    </div>
+</body>
+</html>

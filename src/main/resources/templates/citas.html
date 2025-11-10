@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Citas</title>
+</head>
+<body>
+<h2>Gestión de Citas</h2>
+<a th:href="@{/}">⬅ Volver al inicio</a>
+<hr>
+
+<div th:if="${error}" style="color: red; background-color: #ffe6e6; padding: 10px; margin: 10px 0; border: 1px solid red;">
+    <strong>Error:</strong> <span th:text="${error}"></span>
+</div>
+
+<form th:action="${editMode ? '/citas/' + cita.idCita + '/actualizar' : '/citas'}" method="post">
+    <input type="hidden" th:if="${editMode}" name="idCita" th:value="${cita.idCita}">
+
+    <label>Fecha:</label>
+    <input type="date" name="fecha" th:value="${cita.fecha}" required><br>
+
+    <label>Hora:</label>
+    <input type="time" name="hora" th:value="${cita.hora}" required><br>
+
+    <label>Motivo:</label>
+    <input type="text" name="motivo" th:value="${cita.motivo}" required><br>
+
+    <label>Estado:</label>
+    <select name="estado" required>
+        <option value="">-- Selecciona Estado --</option>
+        <option value="PROGRAMADA" th:selected="${cita.estado != null and cita.estado.name() == 'PROGRAMADA'}">Programada</option>
+        <option value="ATENDIDA" th:selected="${cita.estado != null and cita.estado.name() == 'ATENDIDA'}">Atendida</option>
+        <option value="CANCELADA" th:selected="${cita.estado != null and cita.estado.name() == 'CANCELADA'}">Cancelada</option>
+    </select><br>
+
+    <label>Médico:</label>
+    <select name="medico.idMedico" required>
+        <option value="">-- Selecciona Médico --</option>
+        <option th:each="m : ${medicos}"
+                th:value="${m.idMedico}"
+                th:text="${m.nombres + ' ' + m.apellidos}"
+                th:selected="${cita.medico != null and cita.medico.idMedico == m.idMedico}">
+        </option>
+    </select><br>
+
+    <label>Paciente:</label>
+    <select name="paciente.idPaciente" required>
+        <option value="">-- Selecciona Paciente --</option>
+        <option th:each="p : ${pacientes}"
+                th:value="${p.idPaciente}"
+                th:text="${p.nombres + ' ' + p.apellidos}"
+                th:selected="${cita.paciente != null and cita.paciente.idPaciente == p.idPaciente}">
+        </option>
+    </select><br>
+
+    <button type="submit" th:text="${editMode} ? 'Actualizar' : 'Guardar'"></button>
+    <a th:if="${editMode}" th:href="@{/citas}">Cancelar</a>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Motivo</th>
+        <th>Estado</th>
+        <th>Médico</th>
+        <th>Paciente</th>
+        <th>Acciones</th>
+    </tr>
+    <tr th:each="c : ${citas}">
+        <td th:text="${c.idCita}"></td>
+        <td th:text="${c.fecha}"></td>
+        <td th:text="${c.hora}"></td>
+        <td th:text="${c.motivo}"></td>
+        <td th:text="${c.estado}"></td>
+        <td th:text="${c.medico != null ? c.medico.nombres + ' ' + c.medico.apellidos : '—'}"></td>
+        <td th:text="${c.paciente != null ? c.paciente.nombres + ' ' + c.paciente.apellidos : '—'}"></td>
+        <td>
+            <a th:href="@{'/citas/' + ${c.idCita} + '/editar'}">Editar</a> |
+            <a th:href="@{'/citas/' + ${c.idCita} + '/delete'}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
